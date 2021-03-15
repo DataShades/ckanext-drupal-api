@@ -63,6 +63,7 @@ setup(
       #
       # http://docs.ckan.org/en/latest/extensions/best-practices.html
       # add-third-party-libraries-to-requirements-txt
+        'requests',
     ],
 
     # If there are data files included in your packages that need to be

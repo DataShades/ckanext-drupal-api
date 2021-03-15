@@ -7,27 +7,8 @@
 
 ## Requirements
 
-**TODO:** For example, you might want to mention here which versions of CKAN this
-extension works with.
-
-If your extension works across different versions you can add the following table:
-
-Compatibility with core CKAN versions:
-
-| CKAN version    | Compatible?   |
-| --------------- | ------------- |
-| 2.6 and earlier | not tested    |
-| 2.7             | not tested    |
-| 2.8             | not tested    |
-| 2.9             | not tested    |
-
-Suggested values:
-
-* "yes"
-* "not tested" - I can't think of a reason why it wouldn't work
-* "not yet" - there is an intention to get it working
-* "no"
-
+* CKAN>=2.9
+* python>=3.7
 
 ## Installation
 
@@ -63,9 +44,16 @@ None at present
 
 **TODO:** Document any optional config settings here. For example:
 
-	# The minimum number of hours to wait before re-checking a resource
-	# (optional, default: 24).
-	ckanext.drupal_api.some_setting = some_default_value
+	# The URL of connected drupal instance
+	ckanext.drupal_api.instance.default.url = http://drupal.com
+
+	# Request timeout for API calls in seconds
+    # (optional, default: 5)
+	ckanext.drupal_api.timeout = 10
+
+	# Cache duration in seconds
+    # (optional, default: 3600)
+	ckanext.drupal_api.cache.duration = 60
 
 
 ## Developer installation

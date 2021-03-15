@@ -1,14 +1,12 @@
 import ckan.plugins as plugins
-import ckan.plugins.toolkit as toolkit
+
+import ckanext.drupal_api.helpers as helpers
 
 
 class DrupalApiPlugin(plugins.SingletonPlugin):
-    plugins.implements(plugins.IConfigurer)
+    plugins.implements(plugins.ITemplateHelpers)
 
-    # IConfigurer
+    # ITemplateHelpers
 
-    def update_config(self, config_):
-        toolkit.add_template_directory(config_, 'templates')
-        toolkit.add_public_directory(config_, 'public')
-        toolkit.add_resource('assets',
-            'drupal_api')
+    def get_helpers(self):
+        return helpers.get_helpers()
