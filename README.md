@@ -12,10 +12,6 @@
 
 ## Installation
 
-**TODO:** Add any additional install steps to the list below.
-   For example installing any non-Python dependencies or adding any required
-   config settings.
-
 To install ckanext-drupal-api:
 
 1. Activate your CKAN virtual environment, for example:
@@ -52,7 +48,7 @@ None at present
 	ckanext.drupal_api.timeout = 10
 
 	# Cache duration in seconds
-    # (optional, default: 3600)
+    # (optional, default: 0)
 	ckanext.drupal_api.cache.duration = 60
 
 

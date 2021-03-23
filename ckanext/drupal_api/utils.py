@@ -17,7 +17,7 @@ CONFIG_CACHE_DURATION = "ckanext.drupal_api.cache.duration"
 CONFIG_REQUEST_TIMEOUT = "ckanext.drupal_api.timeout"
 
 DEFAULT_REQUEST_TIMEOUT = 5
-DEFAULT_CACHE_DURATION = 1
+DEFAULT_CACHE_DURATION = 3600
 
 
 class Drupal:
@@ -26,7 +26,7 @@ class Drupal:
     @classmethod
     def get(cls, instance: str = "default") -> Drupal:
         url = (
-            tk.config.get(CONFIG_DRUPAL_URL.format(instance))
+            tk.config.get(CONFIG_DRUPAL_URL.format(name=instance))
             or tk.config[CONFIG_DRUPAL_URL]
         )
         return cls(url)
@@ -44,7 +44,7 @@ class Drupal:
         return req.json()
 
     def get_menu(self, name):
-        return self._request("menu_item", name)
+        return self._request("menu_items", name)
 
 
 def cached(func: Callable) -> Callable:
@@ -57,11 +57,11 @@ def cached(func: Callable) -> Callable:
         if value:
             return json.loads(value)
 
-        value = func(args, kwargs)
+        value = func(*args, **kwargs)
         cache_duration = tk.asint(
             tk.config.get(CONFIG_CACHE_DURATION, DEFAULT_CACHE_DURATION)
         )
-        conn.set(json.dumps(value), ex=cache_duration)
+        conn.set(key, json.dumps(value), ex=cache_duration)
         return value
 
     return wrapper
