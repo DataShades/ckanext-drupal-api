@@ -1,12 +1,19 @@
-from typing import Callable, Dict, Iterable
+import logging
+from typing import Callable, Dict, Iterable, TypeVar
 
-from ckanext.drupal_api.utils import Drupal, cached
+from requests.exceptions import HTTPError, ConnectTimeout
+
+from ckanext.drupal_api.utils import Drupal, cached, DontCache, MaybeNotCached
 
 
 _helpers: Dict[str, Callable] = {}
+log = logging.getLogger(__name__)
+
+T = TypeVar('T', bound=Callable)
+Menu = Iterable[Dict]
 
 
-def helper(func: Callable):
+def helper(func: T) -> T:
     _helpers[f"drupal_api_{func.__name__}"] = func
     return func
 
@@ -17,10 +24,13 @@ def get_helpers():
 
 @helper
 @cached
-def menu(name: str, with_disabled: bool = False) -> Iterable:
+def menu(name: str, with_disabled: bool = False) -> MaybeNotCached[Menu]:
     drupal = Drupal.get()
-    data = drupal.get_menu(name)
-
+    try:
+        data = drupal.get_menu(name)
+    except (HTTPError, ConnectTimeout) as e:
+        log.error('Cannot get drupal menu %s: %s', name, e)
+        return DontCache([])
     details = {
         item['id']: item['attributes']
         for item in data['data']
