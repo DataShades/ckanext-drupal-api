@@ -43,7 +43,10 @@ class Drupal:
         req.raise_for_status()
         return req.json()
 
-    def get_menu(self, name):
+    def full_url(self, path: str):
+        return self.url + '/' + path.lstrip('/')
+
+    def get_menu(self, name: str) -> dict:
         return self._request("menu_items", name)
 
 

@@ -26,6 +26,9 @@ def menu(name: str, with_disabled: bool = False) -> Iterable:
         for item in data['data']
     }
     for v in sorted(details.values(), key=lambda v: v['weight'], reverse=True):
+        v.setdefault('submenu', [])
+        if v['url'].startswith('/'):
+            v['url'] = drupal.full_url(v['url'])
         if v['parent']:
             details[v['parent']].setdefault('submenu', []).append(v)
 
@@ -33,7 +36,7 @@ def menu(name: str, with_disabled: bool = False) -> Iterable:
         {
             'url': link['url'],
             'title': link['title'],
-            'submenu': link.get('submenu', []),
+            'submenu': link['submenu']
         }
         for link in details.values()
         if not link['parent'] and (with_disabled or link['enabled'])
