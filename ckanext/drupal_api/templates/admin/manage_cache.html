@@ -1,0 +1,26 @@
+{% extends "admin/base.html" %} 
+
+{% block primary_content_inner %}
+  <p>
+    {{ _('Clear cache for the synced drupal menus (header & footer)') }}
+  </p>
+  <form method="POST" id="clear-menu-cache">
+      <button type="submit" name="clear-menu-cache" value="clear_cache" class="btn btn-primary">
+        {{ _('Clear cache') }}
+      </button>
+    </form>
+  <hr />
+{% endblock %} 
+
+{% block secondary_content %}
+<div class="module module-narrow module-shallow">
+  <h2 class="module-heading">
+    <i class="fa fa-info-circle"></i>
+    {{ _('Menu synchronization') }}
+  </h2>
+  <div class="module-content">
+    <p>{{ _('Here you can manage menu synchronization with Drupal') }}</p>
+    <p>{{ _('The cache lifespan is {} seconds').format(cache_lifespan) }} </p>
+  </div>
+</div>
+{% endblock %}

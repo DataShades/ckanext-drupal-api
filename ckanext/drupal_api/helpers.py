@@ -3,7 +3,7 @@ from typing import Callable, Dict, Iterable, TypeVar
 
 from requests.exceptions import HTTPError, ConnectTimeout
 
-from ckanext.drupal_api.utils import Drupal, cached, DontCache, MaybeNotCached
+from ckanext.drupal_api.utils import Drupal, cached, DontCache, MaybeNotCached, _get_api_version
 
 
 _helpers: Dict[str, Callable] = {}
@@ -24,30 +24,19 @@ def get_helpers():
 
 @helper
 @cached
-def menu(name: str, with_disabled: bool = False) -> MaybeNotCached[Menu]:
-    drupal = Drupal.get()
-    try:
-        data = drupal.get_menu(name)
-    except (HTTPError, ConnectTimeout) as e:
-        log.error('Cannot get drupal menu %s: %s', name, e)
+def menu(name: str) -> MaybeNotCached[Menu]:
+    api_connector = _get_api_version()
+    
+    if not api_connector:
         return DontCache([])
-    details = {
-        item['id']: item['attributes']
-        for item in data['data']
-    }
-    for v in sorted(details.values(), key=lambda v: v['weight'], reverse=True):
-        v.setdefault('submenu', [])
-        if v['url'].startswith('/'):
-            v['url'] = drupal.full_url(v['url'])
-        if v['parent']:
-            details[v['parent']].setdefault('submenu', []).append(v)
 
-    return [
-        {
-            'url': link['url'],
-            'title': link['title'],
-            'submenu': link['submenu']
-        }
-        for link in details.values()
-        if not link['parent'] and (with_disabled or link['enabled'])
-    ]
+    drupal_api = api_connector.get()
+
+    try:
+        menu = drupal_api.get_menu(name)
+    except (HTTPError, ConnectTimeout) as e:
+        log.error(f'Request error during menu fetching - {name}: {e}')
+        return DontCache([])
+
+    return menu
+
