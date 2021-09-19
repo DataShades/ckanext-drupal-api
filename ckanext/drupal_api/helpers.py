@@ -1,16 +1,14 @@
 import logging
-from typing import Callable, Dict, Iterable, TypeVar
+from typing import Callable, Dict
 
 from requests.exceptions import HTTPError, ConnectTimeout
 
-from ckanext.drupal_api.utils import Drupal, cached, DontCache, MaybeNotCached, _get_api_version
+from ckanext.drupal_api.utils import cached, _get_api_version
+from ckanext.drupal_api.types import Menu, T, MaybeNotCached, DontCache
 
 
 _helpers: Dict[str, Callable] = {}
 log = logging.getLogger(__name__)
-
-T = TypeVar('T', bound=Callable)
-Menu = Iterable[Dict]
 
 
 def helper(func: T) -> T:
@@ -26,7 +24,7 @@ def get_helpers():
 @cached
 def menu(name: str) -> MaybeNotCached[Menu]:
     api_connector = _get_api_version()
-    
+
     if not api_connector:
         return DontCache([])
 
@@ -35,8 +33,7 @@ def menu(name: str) -> MaybeNotCached[Menu]:
     try:
         menu = drupal_api.get_menu(name)
     except (HTTPError, ConnectTimeout) as e:
-        log.error(f'Request error during menu fetching - {name}: {e}')
+        log.error(f"Request error during menu fetching - {name}: {e}")
         return DontCache([])
 
     return menu
-
