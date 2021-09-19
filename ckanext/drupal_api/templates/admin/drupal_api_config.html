@@ -1,0 +1,85 @@
+{% extends "admin/base.html" %}
+
+{% block primary_content_inner %}
+<form method="POST" action="">
+  <table class="table table-header table-hover table-bordered">
+    <thead>
+      <th style="width: 75%">Description</th>
+      <th>Action</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <p>{{ _('Clear cache for the synced drupal menus') }}</p>
+          <p>
+            {% set menu_export_url = drupal_url + menu_export_endpoint %}
+
+            {{ _("Current menu export URL")}} -
+            <a target="_blank" href="{{ menu_export_url }}">{{ menu_export_url }}</a>
+          </p>
+          <p>
+            {{ _("Current API version")}} - <code>{{ api_version }}</code>
+          </p>
+
+          <div class="help-block small bg-info" style="padding:10px;">
+            <p class="bg-info">
+              <i class="fa fa-info-circle"></i>
+              {{ _("If you made changes on the Drupal side, but you don't see the changes:") }}
+
+            <ol>
+              <li>{{ _("Clear the Drupal cache via Drush or Admin panel.") }}</li>
+              <li>{{ _("Clear the CKAN cache by pressing the clear button.") }}</li>
+            </ol>
+            </p>
+          </div>
+          <div class="help-block small bg-danger" style="padding:10px;">
+            <p>
+              <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+              {{ _('If you are using the core API version, you might face the situation when your endpoint differ from the default one.')}}
+              <code>DEFAULT_MENU_EXPORT_EP = "/resource/layout/export"</code>
+              <br>
+              {{ _('In this case, you can specify the menu export endpoint through the config, e.g.:')}}
+              <code>ckanext.drupal_api.core.menu_export_endpoint = /api/v1/menu_export</code>
+            </p>
+          </div>
+        </td>
+        <td>
+          <button type="submit" name="clear-menu-cache" value="clear_cache" class="btn btn-danger">
+            <i class="fa fa-times"></i>{{ _('Clear') }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+{% endblock %}
+
+{% block secondary_content %}
+<div class="module module-narrow module-shallow">
+  <h2 class="module-heading">
+    <i class="fa fa-info-circle"></i>
+    {{ _('Drupal API') }}
+  </h2>
+  <div class="module-content">
+    <p><b>{{ _('Cache info') }}</b></p>
+    <p>
+      {{ _('Default cache TTL is {} sec.').format(cache_lifespan) }}
+      {{ _('You can specify the TTL by providing next config option:') }}
+    <pre>ckanext.drupal_api.cache.duration</pre>
+    </p>
+
+    <hr>
+
+    <p><b>{{ _('API versions') }}</b></p>
+    <p>
+      {{ _("Currently, there are two supported API versions:") }}
+      <a target="_blank" href="https://www.drupal.org/project/jsonapi">JSON API</a> {{ _('and') }}
+      <a target="_blank" href="https://www.drupal.org/docs/8/core/modules/rest">RESTful Web Services</a>
+      <i>({{ _('default') }})</i>
+      {{ _("You can specify the API version with next config option:") }}
+    <pre>ckanext.drupal_api.api_version</pre>
+    {{ _("There are two options: ") }} <code>json</code> {{ _('and') }} <code>core</code>
+    </p>
+  </div>
+</div>
+{% endblock %}

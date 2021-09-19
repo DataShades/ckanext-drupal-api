@@ -4,7 +4,8 @@ from flask import Blueprint
 
 import ckan.plugins.toolkit as tk
 
-from ckanext.drupal_api.utils import CONFIG_CACHE_DURATION, DEFAULT_CACHE_DURATION, drop_cache_for
+import ckanext.drupal_api.config as c
+from ckanext.drupal_api.utils import drop_cache_for
 from ckanext.drupal_api.helpers import menu
 
 
@@ -13,17 +14,20 @@ drupal_api = Blueprint("drupal_api", __name__)
 
 
 @drupal_api.route("/ckan-admin/drupal-api", methods=("GET", "POST"))
-def manage_cache():
+def drupal_api_config():
     """
     Invalidates cache
     """
     if not tk.request.form:
         return tk.render(
-            "admin/manage_cache.html",
+            "admin/drupal_api_config.html",
             {
                 "cache_lifespan": tk.config.get(
-                    CONFIG_CACHE_DURATION, DEFAULT_CACHE_DURATION
-                )
+                    c.CONFIG_CACHE_DURATION, c.DEFAULT_CACHE_DURATION
+                ),
+                "drupal_url": tk.config.get(c.CONFIG_DRUPAL_URL).strip('/'),
+                "menu_export_endpoint": tk.config.get(c.CONFIG_MENU_EXPORT, c.DEFAULT_MENU_EXPORT_EP),
+                "api_version": tk.config.get(c.CONFIG_DRUPAL_API_VERSION, c.DEFAULT_API_VERSION)
             },
         )
     else:
@@ -31,7 +35,7 @@ def manage_cache():
             drop_cache_for(menu.__name__)
             tk.h.flash_success(tk._("Cache has been cleared"))
 
-        return tk.h.redirect_to("drupal_api.manage_cache")
+        return tk.h.redirect_to("drupal_api.drupal_api_config")
 
 
 blueprints = [drupal_api]

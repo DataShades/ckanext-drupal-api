@@ -18,7 +18,7 @@ class DrupalApiPlugin(p.SingletonPlugin):
 
     def update_config(self, config_):
         tk.add_template_directory(config_, "templates")
-        tk.add_ckan_admin_tab(config_, "drupal_api.manage_cache", "Drupal API")
+        tk.add_ckan_admin_tab(config_, "drupal_api.drupal_api_config", "Drupal API")
 
     # IBlueprint
 
