@@ -1,5 +1,6 @@
 from __future__ import annotations
 import logging
+from typing import Optional
 
 import requests
 
@@ -16,8 +17,10 @@ class Drupal:
     url: str
 
     @classmethod
-    def get(cls, instance: str = "default") -> Drupal:
+    def get(cls, instance: str = "default") -> Optional[Drupal]:
         url = tk.config.get(CONFIG_DRUPAL_URL)
+        assert url, "Drupal URL is missing"
+
         return cls(url)
 
     def __init__(self, url: str):
@@ -38,7 +41,7 @@ class JsonAPI(Drupal):
         req.raise_for_status()
         return req.json()
 
-    def get_menu(self, name: str) -> dict:
+    def get_menu(self, name: str) -> list[dict[str, str]]:
         data: dict = self._request("menu_items", name)
 
         details = {item["id"]: item["attributes"] for item in data["data"]}
