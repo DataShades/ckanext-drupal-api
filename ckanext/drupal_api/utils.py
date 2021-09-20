@@ -27,7 +27,7 @@ def _get_api_version() -> Optional[Union[CoreAPI, JsonAPI]]:
     """
     supported_api = {JSON_API: JsonAPI, CORE_API: CoreAPI}
 
-    api_version: str = tk.config.get(CONFIG_DRUPAL_API_VERSION)
+    api_version: str = tk.config.get(CONFIG_DRUPAL_API_VERSION, DEFAULT_API_VERSION)
     return supported_api.get(api_version)
 
 
