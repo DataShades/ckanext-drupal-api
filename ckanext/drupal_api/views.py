@@ -25,7 +25,7 @@ def drupal_api_config():
                 "cache_lifespan": tk.config.get(
                     c.CONFIG_CACHE_DURATION, c.DEFAULT_CACHE_DURATION
                 ),
-                "drupal_url": tk.config.get(c.CONFIG_DRUPAL_URL).strip('/'),
+                "drupal_url": tk.config.get(c.CONFIG_DRUPAL_URL, "").strip('/'),
                 "menu_export_endpoint": tk.config.get(c.CONFIG_MENU_EXPORT, c.DEFAULT_MENU_EXPORT_EP),
                 "api_version": tk.config.get(c.CONFIG_DRUPAL_API_VERSION, c.DEFAULT_API_VERSION)
             },
