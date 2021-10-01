@@ -1,6 +1,16 @@
 {% extends "admin/base.html" %}
 
 {% block primary_content_inner %}
+
+{% if not drupal_url %}
+<p>
+  <div class="h4 text-warning">
+    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    {{ _('ERROR. Missing Drupal URL. The extension won\'t work properly!') }}
+  </div>
+</p>
+{% endif %}
+
 <form method="POST" action="">
   <table class="table table-header table-hover table-bordered">
     <thead>

@@ -19,7 +19,9 @@ class Drupal:
     @classmethod
     def get(cls, instance: str = "default") -> Optional[Drupal]:
         url = tk.config.get(CONFIG_DRUPAL_URL)
-        assert url, "Drupal URL is missing"
+        if not url:
+            log.error("Drupal URL is missing")
+            return
 
         return cls(url)
 
