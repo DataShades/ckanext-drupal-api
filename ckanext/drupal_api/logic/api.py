@@ -39,7 +39,15 @@ class JsonAPI(Drupal):
     def _request(self, entity_type: str, entity_name: str) -> dict:
         url = self.url + f"/jsonapi/{entity_type}/{entity_name}"
 
-        req = requests.get(url, timeout=self.timeout)
+        http_user: str = tk.config.get(CONFIG_REQUEST_HTTP_USER)
+        http_pass: str = tk.config.get(CONFIG_REQUEST_HTTP_PASS)
+
+        session = requests.Session()
+        
+        if http_user and http_pass:
+            session.auth = (http_user, http_pass)
+
+        req = session.get(url, timeout=self.timeout)
         req.raise_for_status()
         return req.json()
 
@@ -76,7 +84,15 @@ class CoreAPI(Drupal):
     def _request(self, endpoint: str) -> dict:
         url = self.url + endpoint
 
-        req = requests.get(url, timeout=self.timeout)
+        http_user: str = tk.config.get(CONFIG_REQUEST_HTTP_USER)
+        http_pass: str = tk.config.get(CONFIG_REQUEST_HTTP_PASS)
+        
+        session = requests.Session()
+        
+        if http_user and http_pass:
+            session.auth = (http_user, http_pass)
+
+        req = session.get(url, timeout=self.timeout)
         req.raise_for_status()
         return req.json()
 

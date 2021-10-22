@@ -41,15 +41,28 @@ None at present
 **TODO:** Document any optional config settings here. For example:
 
 	# The URL of connected drupal instance
-	ckanext.drupal_api.instance.default.url = http://drupal.com
+	ckanext.drupal_api.drupal_url = http://drupal.com
 
 	# Request timeout for API calls in seconds
     # (optional, default: 5)
 	ckanext.drupal_api.timeout = 10
 
-	# Cache duration in seconds
-    # (optional, default: 0)
+	# Cache TTL in seconds
+    # (optional, default: 3600)
 	ckanext.drupal_api.cache.duration = 60
+
+    # HTTP auth credentials (optional)
+	ckanext.drupal_api.request.user = username
+    ckanext.drupal_api.request.pass = password
+
+    # API versions, only two options: core & json
+    # Because, there are two supported API versions: JSON API & RESTful Web Services
+    ckanext.drupal_api.api_version = json
+
+    # If you are using the core API version, you might face the situation when your endpoint differ from the default one
+    # In this case, you can specify the menu export endpoint through the config, e.g.:
+    ckanext.drupal_api.core.menu_export_endpoint = /api/v1/menu_export
+
 
 
 ## Developer installation
