@@ -6,8 +6,7 @@ import requests
 
 import ckan.plugins.toolkit as tk
 
-from ckanext.drupal_api.types import T, MaybeNotCached
-from ckanext.drupal_api.config import *
+import ckanext.drupal_api.config as c
 
 
 log = logging.getLogger(__name__)
@@ -18,7 +17,7 @@ class Drupal:
 
     @classmethod
     def get(cls, instance: str = "default") -> Optional[Drupal]:
-        url = tk.config.get(CONFIG_DRUPAL_URL)
+        url = tk.config.get(c.CONFIG_DRUPAL_URL)
         if not url:
             log.error("Drupal URL is missing")
             return
@@ -28,7 +27,7 @@ class Drupal:
     def __init__(self, url: str):
         self.url = url.strip("/")
         self.timeout = tk.asint(
-            tk.config.get(CONFIG_REQUEST_TIMEOUT, DEFAULT_REQUEST_TIMEOUT)
+            tk.config.get(c.CONFIG_REQUEST_TIMEOUT, c.DEFAULT_REQUEST_TIMEOUT)
         )
 
     def full_url(self, path: str):
@@ -39,8 +38,8 @@ class JsonAPI(Drupal):
     def _request(self, entity_type: str, entity_name: str) -> dict:
         url = self.url + f"/jsonapi/{entity_type}/{entity_name}"
 
-        http_user: str = tk.config.get(CONFIG_REQUEST_HTTP_USER)
-        http_pass: str = tk.config.get(CONFIG_REQUEST_HTTP_PASS)
+        http_user: str = tk.config.get(c.CONFIG_REQUEST_HTTP_USER)
+        http_pass: str = tk.config.get(c.CONFIG_REQUEST_HTTP_PASS)
 
         session = requests.Session()
         
@@ -84,8 +83,8 @@ class CoreAPI(Drupal):
     def _request(self, endpoint: str) -> dict:
         url = self.url + endpoint
 
-        http_user: str = tk.config.get(CONFIG_REQUEST_HTTP_USER)
-        http_pass: str = tk.config.get(CONFIG_REQUEST_HTTP_PASS)
+        http_user: str = tk.config.get(c.CONFIG_REQUEST_HTTP_USER)
+        http_pass: str = tk.config.get(c.CONFIG_REQUEST_HTTP_PASS)
         
         session = requests.Session()
         
@@ -98,10 +97,10 @@ class CoreAPI(Drupal):
 
     def get_menu(self, name: str) -> dict:
         data: dict = self._request(
-            endpoint=tk.config.get(CONFIG_MENU_EXPORT, DEFAULT_MENU_EXPORT_EP)
+            endpoint=tk.config.get(c.CONFIG_MENU_EXPORT, c.DEFAULT_MENU_EXPORT_EP)
         )
         log.info(
             f"Menu {name} has been fetched successfully. Cached for \
-                {tk.config.get(CONFIG_CACHE_DURATION, DEFAULT_CACHE_DURATION)} seconds"
+                {tk.config.get(c.CONFIG_CACHE_DURATION, c.DEFAULT_CACHE_DURATION)} seconds"
         )
         return data.get(name, {})

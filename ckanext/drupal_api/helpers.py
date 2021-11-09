@@ -1,7 +1,7 @@
 import logging
 from typing import Callable, Dict
 
-from requests.exceptions import HTTPError, ConnectTimeout
+from requests.exceptions import RequestException
 
 from ckanext.drupal_api.utils import cached, _get_api_version
 from ckanext.drupal_api.types import Menu, T, MaybeNotCached, DontCache
@@ -31,7 +31,7 @@ def menu(name: str) -> MaybeNotCached[Menu]:
 
     try:
         menu = drupal_api.get_menu(name)
-    except (HTTPError, ConnectTimeout) as e:
+    except RequestException as e:
         log.error(f"Request error during menu fetching - {name}: {e}")
         return DontCache({})
 
