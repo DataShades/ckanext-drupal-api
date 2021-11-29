@@ -48,7 +48,7 @@ class JsonAPI(Drupal):
         if http_user and http_pass:
             session.auth = (http_user, http_pass)
 
-        req = session.get(url, timeout=self.timeout)
+        req = session.get(url, timeout=self.timeout, verify=False)
         req.raise_for_status()
         return req.json()
 
