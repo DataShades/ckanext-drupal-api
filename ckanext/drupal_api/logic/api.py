@@ -1,7 +1,7 @@
 from __future__ import annotations
 import logging
 from typing import Optional
-
+from urllib.parse import urljoin
 import requests
 
 import ckan.plugins.toolkit as tk
@@ -19,10 +19,12 @@ class Drupal:
     def get(cls, instance: str = "default") -> Optional[Drupal]:
         url = tk.config.get(c.CONFIG_DRUPAL_URL)
         if not url:
-            log.error("Drupal URL is missing")
+            log.error("Drupal URL is missing: %s", c.CONFIG_DRUPAL_URL)
             return
-
-        return cls(url)
+        default_lang = tk.config.get("ckan.locale_default")
+        current_lang = tk.h.lang()
+        localised_url = url.format(LANG=current_lang if current_lang != default_lang else "")
+        return cls(localised_url)
 
     def __init__(self, url: str):
         self.url = url.strip("/")
@@ -31,7 +33,7 @@ class Drupal:
         )
 
     def full_url(self, path: str):
-        return self.url + "/" + path.lstrip("/")
+        return urljoin(self.url, path)
 
 
 class JsonAPI(Drupal):
@@ -42,7 +44,7 @@ class JsonAPI(Drupal):
         http_pass: str = tk.config.get(c.CONFIG_REQUEST_HTTP_PASS)
 
         session = requests.Session()
-        
+
         if http_user and http_pass:
             session.auth = (http_user, http_pass)
 
@@ -85,9 +87,9 @@ class CoreAPI(Drupal):
 
         http_user: str = tk.config.get(c.CONFIG_REQUEST_HTTP_USER)
         http_pass: str = tk.config.get(c.CONFIG_REQUEST_HTTP_PASS)
-        
+
         session = requests.Session()
-        
+
         if http_user and http_pass:
             session.auth = (http_user, http_pass)
 

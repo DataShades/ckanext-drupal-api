@@ -22,7 +22,7 @@ def get_helpers():
 
 @helper
 @cached
-def menu(name: str) -> MaybeNotCached[Menu]:
+def menu(name: str, _cache_extra: str = "en") -> MaybeNotCached[Menu]:
     api_connector = _get_api_version()
     drupal_api = api_connector.get()
 
