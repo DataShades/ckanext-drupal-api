@@ -5,7 +5,7 @@ from flask import Blueprint
 import ckan.plugins.toolkit as tk
 
 import ckanext.drupal_api.config as c
-from ckanext.drupal_api.utils import drop_cache_for
+from ckanext.drupal_api.utils import drop_cache_for, _get_menu_export_endpoint
 from ckanext.drupal_api.helpers import menu
 
 
@@ -26,7 +26,7 @@ def drupal_api_config():
                     c.CONFIG_CACHE_DURATION, c.DEFAULT_CACHE_DURATION
                 ),
                 "drupal_url": tk.config.get(c.CONFIG_DRUPAL_URL, "").strip('/'),
-                "menu_export_endpoint": tk.config.get(c.CONFIG_MENU_EXPORT, c.DEFAULT_MENU_EXPORT_EP),
+                "menu_export_endpoint": _get_menu_export_endpoint(),
                 "api_version": tk.config.get(c.CONFIG_DRUPAL_API_VERSION, c.DEFAULT_API_VERSION)
             },
         )

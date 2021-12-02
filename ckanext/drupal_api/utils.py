@@ -10,10 +10,9 @@ from typing import Callable, Dict, Optional, Union, cast, Any
 import ckan.plugins.toolkit as tk
 import ckan.lib.redis as redis
 
+import ckanext.drupal_api.config as c
 from ckanext.drupal_api.types import T, MaybeNotCached, DontCache
-from ckanext.drupal_api.config import *
 from ckanext.drupal_api.logic.api import CoreAPI, JsonAPI
-
 
 log = logging.getLogger(__name__)
 
@@ -25,9 +24,9 @@ def _get_api_version() -> Optional[Union[CoreAPI, JsonAPI]]:
         - JSON API
         - Rest API (Drupal core)
     """
-    supported_api = {JSON_API: JsonAPI, CORE_API: CoreAPI}
+    supported_api = {c.JSON_API: JsonAPI, c.CORE_API: CoreAPI}
 
-    api_version: str = tk.config.get(CONFIG_DRUPAL_API_VERSION, DEFAULT_API_VERSION)
+    api_version: str = tk.config.get(c.CONFIG_DRUPAL_API_VERSION, c.DEFAULT_API_VERSION)
     return supported_api.get(api_version)
 
 
@@ -49,7 +48,7 @@ def cached(func: Callable[..., MaybeNotCached[T]]) -> Callable[..., T]:
 
         value = func(*args, **kwargs)
         cache_duration = tk.asint(
-            tk.config.get(CONFIG_CACHE_DURATION, DEFAULT_CACHE_DURATION)
+            tk.config.get(c.CONFIG_CACHE_DURATION, c.DEFAULT_CACHE_DURATION)
         )
 
         if isinstance(value, DontCache):
@@ -80,3 +79,12 @@ def drop_cache_for(name):
 
 def _get_redis_conn():
     return redis.connect_to_redis()
+
+
+def _get_menu_export_endpoint():
+    if tk.config.get(
+        c.CONFIG_DRUPAL_API_VERSION, c.DEFAULT_API_VERSION
+    ) == "json":
+        return "/jsonapi/menu_items/{menu_id}"
+    else:
+        tk.config.get(c.CONFIG_MENU_EXPORT, c.DEFAULT_MENU_EXPORT_EP)
