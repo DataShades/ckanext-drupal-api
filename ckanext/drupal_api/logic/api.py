@@ -64,7 +64,7 @@ class JsonAPI(Drupal):
                 details[v["parent"]].setdefault("submenu", []).append(v)
 
         return [
-            {"url": link["url"], "title": link["title"], "submenu": link["submenu"]}
+            link
             for link in details.values()
             if not link["parent"] and link["enabled"]
         ]
