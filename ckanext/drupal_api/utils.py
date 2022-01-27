@@ -87,4 +87,4 @@ def _get_menu_export_endpoint():
     ) == "json":
         return "/jsonapi/menu_items/{menu_id}"
     else:
-        tk.config.get(c.CONFIG_MENU_EXPORT, c.DEFAULT_MENU_EXPORT_EP)
+        return tk.config.get(c.CONFIG_MENU_EXPORT, c.DEFAULT_MENU_EXPORT_EP)

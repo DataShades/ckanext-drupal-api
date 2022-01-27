@@ -31,6 +31,9 @@
             {{ _("Current API version")}} - <code>{{ api_version }}</code>
           </p>
 
+          <p>
+            {{ _("Current Cache TTL")}} - <code>{{ cache_ttl_current }}</code>
+          </p>
           <div class="help-block small bg-info" style="padding:10px;">
             <p class="bg-info">
               <i class="fa fa-info-circle"></i>
@@ -73,7 +76,7 @@
   <div class="module-content">
     <p><b>{{ _('Cache info') }}</b></p>
     <p>
-      {{ _('Default cache TTL is {} sec.').format(cache_lifespan) }}
+      {{ _('Default cache TTL is {} sec.').format(cache_ttl_default) }}
       {{ _('You can specify the TTL by providing next config option:') }}
     <pre>ckanext.drupal_api.cache.duration</pre>
     </p>
