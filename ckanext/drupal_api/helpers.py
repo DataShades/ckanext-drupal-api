@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import logging
-from typing import Callable, Dict
+from typing import Any, Callable, Dict, Optional
 
 from requests.exceptions import RequestException
 
@@ -22,7 +24,7 @@ def get_helpers():
 
 @helper
 @cached
-def menu(name: str, _cache_extra: str = "en") -> MaybeNotCached[Menu]:
+def menu(name: str, cache_extras: Optional[dict[str, Any]] = None) -> MaybeNotCached[Menu]:
     api_connector = _get_api_version()
     drupal_api = api_connector.get()
 

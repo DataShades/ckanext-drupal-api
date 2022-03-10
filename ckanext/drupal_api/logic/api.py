@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 import requests
 
 import ckan.plugins.toolkit as tk
-
+import ckan.plugins as p
 import ckanext.drupal_api.config as c
 
 
@@ -48,6 +48,7 @@ class JsonAPI(Drupal):
         if http_user and http_pass:
             session.auth = (http_user, http_pass)
 
+        _add_drupal_session(session)
         req = session.get(url, timeout=self.timeout, verify=False)
         req.raise_for_status()
         return req.json()
@@ -93,6 +94,7 @@ class CoreAPI(Drupal):
         if http_user and http_pass:
             session.auth = (http_user, http_pass)
 
+        _add_drupal_session(session)
         req = session.get(url, timeout=self.timeout)
         req.raise_for_status()
         return req.json()
@@ -106,3 +108,14 @@ class CoreAPI(Drupal):
                 {tk.config.get(c.CONFIG_CACHE_DURATION, c.DEFAULT_CACHE_DURATION)} seconds"
         )
         return data.get(name, {})
+
+
+def _add_drupal_session(session: requests.Session):
+    if not tk.request or not p.plugin_loaded("drupal_idp"):
+        return
+
+    from ckanext.drupal_idp.utils import session_cookie_name
+    name = session_cookie_name()
+    sid = tk.request.cookies.get(name)
+    if sid:
+        session.headers["Cookie"] = f"{name}={sid}"
