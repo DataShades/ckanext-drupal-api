@@ -114,7 +114,11 @@ def _add_drupal_session(session: requests.Session):
     if not tk.request or not p.plugin_loaded("drupal_idp"):
         return
 
-    from ckanext.drupal_idp.utils import session_cookie_name
+    try:
+        from ckanext.drupal_idp.utils import session_cookie_name
+    except ImportError:
+        return
+
     name = session_cookie_name()
     sid = tk.request.cookies.get(name)
     if sid:
