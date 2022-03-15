@@ -6,7 +6,7 @@ import ckan.plugins.toolkit as tk
 
 import ckanext.drupal_api.config as c
 from ckanext.drupal_api.utils import drop_cache_for, _get_menu_export_endpoint
-from ckanext.drupal_api.helpers import menu
+from ckanext.drupal_api.helpers import custom_endpoint, menu
 
 
 log = logging.getLogger(__name__)
@@ -33,6 +33,9 @@ def drupal_api_config():
         if "clear-menu-cache" in tk.request.form:
             drop_cache_for(menu.__name__)
             tk.h.flash_success(tk._("Cache has been cleared"))
+
+        if "clear-custom-cache" in tk.request.form:
+            drop_cache_for(custom_endpoint.__name__)
 
         return tk.h.redirect_to("drupal_api.drupal_api_config")
 

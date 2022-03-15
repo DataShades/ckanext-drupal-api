@@ -1,8 +1,8 @@
 from __future__ import annotations
 import logging
+import requests
 from typing import Optional
 from urllib.parse import urljoin
-import requests
 
 import ckan.plugins.toolkit as tk
 import ckan.plugins as p
@@ -10,6 +10,24 @@ import ckanext.drupal_api.config as c
 
 
 log = logging.getLogger(__name__)
+
+
+def make_request(url: str) -> dict:
+    http_user: str = tk.config.get(c.CONFIG_REQUEST_HTTP_USER)
+    http_pass: str = tk.config.get(c.CONFIG_REQUEST_HTTP_PASS)
+    timeout = tk.asint(
+        tk.config.get(c.CONFIG_REQUEST_TIMEOUT, c.DEFAULT_REQUEST_TIMEOUT)
+    )
+
+    session = requests.Session()
+
+    if http_user and http_pass:
+        session.auth = (http_user, http_pass)
+
+    _add_drupal_session(session)
+    req = session.get(url, timeout=timeout)
+    req.raise_for_status()
+    return req.json()
 
 
 class Drupal:
@@ -23,14 +41,13 @@ class Drupal:
             return
         default_lang = tk.config.get("ckan.locale_default")
         current_lang = tk.h.lang()
-        localised_url = url.format(LANG=current_lang if current_lang != default_lang else "")
+        localised_url = url.format(
+            LANG=current_lang if current_lang != default_lang else ""
+        )
         return cls(localised_url)
 
     def __init__(self, url: str):
         self.url = url.strip("/")
-        self.timeout = tk.asint(
-            tk.config.get(c.CONFIG_REQUEST_TIMEOUT, c.DEFAULT_REQUEST_TIMEOUT)
-        )
 
     def full_url(self, path: str):
         return urljoin(self.url, path)
@@ -39,19 +56,7 @@ class Drupal:
 class JsonAPI(Drupal):
     def _request(self, entity_type: str, entity_name: str) -> dict:
         url = self.url + f"/jsonapi/{entity_type}/{entity_name}"
-
-        http_user: str = tk.config.get(c.CONFIG_REQUEST_HTTP_USER)
-        http_pass: str = tk.config.get(c.CONFIG_REQUEST_HTTP_PASS)
-
-        session = requests.Session()
-
-        if http_user and http_pass:
-            session.auth = (http_user, http_pass)
-
-        _add_drupal_session(session)
-        req = session.get(url, timeout=self.timeout, verify=False)
-        req.raise_for_status()
-        return req.json()
+        return make_request(url)
 
     def get_menu(self, name: str) -> list[dict[str, str]]:
         data: dict = self._request("menu_items", name)
@@ -65,9 +70,7 @@ class JsonAPI(Drupal):
                 details[v["parent"]].setdefault("submenu", []).append(v)
 
         return [
-            link
-            for link in details.values()
-            if not link["parent"] and link["enabled"]
+            link for link in details.values() if not link["parent"] and link["enabled"]
         ]
 
 
@@ -85,19 +88,7 @@ class CoreAPI(Drupal):
 
     def _request(self, endpoint: str) -> dict:
         url = self.url + endpoint
-
-        http_user: str = tk.config.get(c.CONFIG_REQUEST_HTTP_USER)
-        http_pass: str = tk.config.get(c.CONFIG_REQUEST_HTTP_PASS)
-
-        session = requests.Session()
-
-        if http_user and http_pass:
-            session.auth = (http_user, http_pass)
-
-        _add_drupal_session(session)
-        req = session.get(url, timeout=self.timeout)
-        req.raise_for_status()
-        return req.json()
+        return make_request(url)
 
     def get_menu(self, name: str) -> dict:
         data: dict = self._request(
