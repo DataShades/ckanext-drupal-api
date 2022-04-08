@@ -32,7 +32,7 @@
           </p>
 
           <p>
-            {{ _("Current Cache TTL")}} - <code>{{ cache_ttl_current }}</code>
+            {{ _("Current Cache TTL")}} - <code>{{ cache_ttl_current or cache_ttl_default }}</code>
           </p>
           <div class="help-block small bg-info" style="padding:10px;">
             <p class="bg-info">

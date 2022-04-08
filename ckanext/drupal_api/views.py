@@ -3,6 +3,7 @@ import logging
 from flask import Blueprint
 
 import ckan.plugins.toolkit as tk
+import ckan.model as model
 
 import ckanext.drupal_api.config as c
 from ckanext.drupal_api.utils import drop_cache_for, _get_menu_export_endpoint
@@ -11,6 +12,20 @@ from ckanext.drupal_api.helpers import custom_endpoint, menu
 
 log = logging.getLogger(__name__)
 drupal_api = Blueprint("drupal_api", __name__)
+
+
+
+@drupal_api.before_request
+def before_request():
+    try:
+        context = {
+            "model": model,
+            "user": tk.g.user,
+            "auth_user_obj": tk.g.userobj
+        }
+        tk.check_access('sysadmin', context)
+    except tk.NotAuthorized:
+        tk.base.abort(403, tk._('Need to be system administrator to manage cache'))
 
 
 @drupal_api.route("/ckan-admin/drupal-api", methods=("GET", "POST"))
