@@ -1,0 +1,5 @@
+.table.table-bordered.table-drupal-api tr th,
+.table.table-bordered.table-drupal-api .bg-info,
+.table.table-bordered.table-drupal-api .help-block {
+    color: black;
+}
