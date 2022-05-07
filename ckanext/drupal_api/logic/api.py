@@ -67,8 +67,9 @@ class JsonAPI(Drupal):
             if v["url"].startswith("/"):
                 v["url"] = self.full_url(v["url"])
             if v["parent"]:
+                if v["parent"] not in details:
+                    continue
                 details[v["parent"]].setdefault("submenu", []).append(v)
-
         return [
             link for link in details.values() if not link["parent"] and link["enabled"]
         ]
