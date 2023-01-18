@@ -1,8 +1,14 @@
-[![Tests](https://github.com/DataShades/ckanext-drupal-api/workflows/Tests/badge.svg?branch=main)](https://github.com/DataShades/ckanext-drupal-api/actions)
-
 # ckanext-drupal-api
 
-**TODO:** Put a description of your extension here:  What does it do? What features does it have? Consider including some screenshots or embedding a video!
+The extension helps synchronize the header and footer between CKAN and Drupal.
+
+It uses two versions of the Drupal API - the core Rest API and the JSON:API.
+
+The extension receives data from the Drupal portal through an endpoint
+(which can be configured in the case of the core REST API) and caches it for
+a certain time, which can also be changed using the Cache TTL config option,
+specifying the value in seconds. If you want to synchronize data more often,
+you need to set a smaller value.
 
 
 ## Requirements
@@ -31,14 +37,12 @@ To install ckanext-drupal-api:
 
 4. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu:
 
-     sudo service apache2 reload
+    sudo service apache2 reload
 
 
 ## Config settings
 
-None at present
-
-**TODO:** Document any optional config settings here. For example:
+The extension provides next configuration options:
 
 	# The URL of connected drupal instance
 	ckanext.drupal_api.drupal_url = http://drupal.com
