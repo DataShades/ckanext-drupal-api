@@ -58,8 +58,8 @@ def custom_endpoint(endpoint: str) -> dict:
     base_url = tk.config.get(c.CONFIG_DRUPAL_URL)
     if not base_url:
         log.error("Drupal URL is missing: %s", c.CONFIG_DRUPAL_URL)
-        return
-    
+        return DontCache({})
+
     try:
         resp = make_request(urljoin(base_url, endpoint))
     except RequestException as e:
