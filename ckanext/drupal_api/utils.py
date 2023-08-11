@@ -9,8 +9,6 @@ from typing import Callable, Dict, Optional, Union, cast, Any
 import ckan.plugins.toolkit as tk
 import ckan.lib.redis as redis
 
-from ckanext.drupal_idp.utils import session_cookie_name
-
 import ckanext.drupal_api.config as c
 from ckanext.drupal_api.types import T, MaybeNotCached, DontCache
 from ckanext.drupal_api.logic.api import CoreAPI, JsonAPI
