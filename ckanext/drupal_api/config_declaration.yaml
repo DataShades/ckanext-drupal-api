@@ -1,0 +1,20 @@
+version: 1
+groups:
+  - annotation: ckanext-drupal-api
+    options:
+      - key: ckanext.drupal_api.drupal_url
+      - key: ckanext.drupal_api.cache.duration
+        type: int
+        default: 3600
+
+      - key: ckanext.drupal_api.timeout
+        type: int
+        default: 5
+
+      - key: ckanext.drupal_api.request.user
+      - key: ckanext.drupal_api.request.pass
+      - key: ckanext.drupal_api.api_version
+        default: core
+
+      - key: ckanext.drupal_api.core.menu_export_endpoint
+        default: "/resource/layout/export"

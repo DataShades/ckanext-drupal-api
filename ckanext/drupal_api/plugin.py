@@ -26,3 +26,7 @@ class DrupalApiPlugin(p.SingletonPlugin):
 
     def get_blueprint(self):
         return blueprints
+
+
+if tk.check_ckan_version("2.10"):
+    tk.blanket.config_declarations(DrupalApiPlugin)
