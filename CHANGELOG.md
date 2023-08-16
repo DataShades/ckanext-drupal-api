@@ -6,9 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
-## Unreleased
+## [v0.6.0](https://github.com/DataShades/ckanext-drupal-api/releases/tag/v0.6.0) - 2023-08-16
 
-<small>[Compare with latest](https://github.com/DataShades/ckanext-drupal-api/compare/v0.3.1...HEAD)</small>
+<small>[Compare with v0.3.1](https://github.com/DataShades/ckanext-drupal-api/compare/v0.3.1...v0.6.0)</small>
 
 ### Features
 
@@ -19,7 +19,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - empty response is cached when drupal is not configured ([cadacfc](https://github.com/DataShades/ckanext-drupal-api/commit/cadacfc1b90cb28543791182ee3b3d3f1f83df26) by Sergey Motornyuk).
 - remove unused import from drupal_idp ([eadc1ff](https://github.com/DataShades/ckanext-drupal-api/commit/eadc1ff98c18e4c5ad6cc4befdfd53b624f2d59b) by Yan Rudenko).
 
-<!-- insertion marker -->
 ## [v0.3.1](https://github.com/DataShades/ckanext-drupal-api/releases/tag/v0.3.1) - 2022-03-14
 
 <small>[Compare with v0.2.2](https://github.com/DataShades/ckanext-drupal-api/compare/v0.2.2...v0.3.1)</small>
