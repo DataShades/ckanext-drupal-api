@@ -3,6 +3,8 @@ groups:
   - annotation: ckanext-drupal-api
     options:
       - key: ckanext.drupal_api.drupal_url
+        default: ""
+
       - key: ckanext.drupal_api.cache.duration
         type: int
         default: 3600

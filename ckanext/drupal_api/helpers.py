@@ -6,10 +6,8 @@ from urllib.parse import urljoin
 
 from requests.exceptions import RequestException
 
-import ckan.plugins.toolkit as tk
-
-import ckanext.drupal_api.config as c
-from ckanext.drupal_api.utils import cached, _get_api_version
+import ckanext.drupal_api.config as da_conf
+from ckanext.drupal_api.utils import cached, get_api_version
 from ckanext.drupal_api.logic.api import make_request
 from ckanext.drupal_api.types import Menu, T, MaybeNotCached, DontCache
 
@@ -30,7 +28,7 @@ def get_helpers():
 @helper
 @cached
 def menu(name: str, cache_extras: Optional[dict[str, Any]] = None) -> MaybeNotCached[Menu]:
-    api_connector = _get_api_version()
+    api_connector = get_api_version()
     drupal_api = api_connector.get()
 
     if not drupal_api:
@@ -55,9 +53,10 @@ def custom_endpoint(endpoint: str) -> dict:
     Returns:
         dict: response from Drupal
     """
-    base_url = tk.config.get(c.CONFIG_DRUPAL_URL)
+    base_url = da_conf.get_drupal_url()
+
     if not base_url:
-        log.error("Drupal URL is missing: %s", c.CONFIG_DRUPAL_URL)
+        log.error("Drupal URL is missing: %s", da_conf.CONFIG_DRUPAL_URL)
         return DontCache({})
 
     try:
@@ -65,4 +64,5 @@ def custom_endpoint(endpoint: str) -> dict:
     except RequestException as e:
         log.error(f"Custom endpoint request error - {endpoint}: {e}")
         return DontCache({})
+
     return resp

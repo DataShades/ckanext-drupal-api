@@ -1,0 +1,65 @@
+{% extends 'admin_panel/base.html' %}
+
+{% import 'macros/autoform.html' as autoform %}
+{% import 'macros/form.html' as form %}
+
+{% block breadcrumb_content %}
+    <li>{% link_for _("Configuration"), named_route='drupal_api.config' %}</li>
+{% endblock breadcrumb_content %}
+
+{% block ap_content %}
+    <h1>{{ _("Drupal API config") }}</h1>
+
+    <form method="POST" action="{{ h.url_for('drupal_api.clear_cache') }}" class="mb-3">
+        <button type="submit" name="clear-menu-cache" value="clear_cache" class="btn btn-primary">
+            </i>{{ _('Clear menu cache') }}
+        </button>
+
+        <button type="submit" name="clear-custom-cache" value="clear_cache" class="btn btn-primary">
+            </i>{{ _('Clear custom endpoint cache') }}
+        </button>
+    </form>
+
+    {% if not configs.drupal_url.value %}
+        <div class="h4 text-warning mb-3">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            {{ _('ERROR. Missing Drupal URL. The extension won\'t work properly!') }}
+        </div>
+    {% endif %}
+
+    <form method="POST">
+        {% for _, config in configs.items() %}
+            {% set default_attrs = {'class': 'form-control'} %}
+            {% set value = data[config.key] or config.value %}
+
+            {% if config.disabled %}
+                {% do default_attrs.update({"disabled": 1}) %}
+            {% endif %}
+
+            {% macro info(text) %}
+                {% if text %}
+                    <div class="info-block">
+                        <i class="fa fa-info-circle"></i>
+                        {{ text }}
+                    </div>
+                {% endif %}
+            {% endmacro %}
+
+            {% if config.type == "select" %}
+                {% call form.select(config.key if not config.disabled else "", label=config.label, options=config.options, selected=value, error=errors[config.key], attrs=default_attrs, is_required=config.required) %}
+                    {{ info(config.help_text) }}
+                {% endcall %}
+            {% elif config.type in ("text", "number", "password") %}
+                {% call form.input(config.key if not config.disabled else "", label=config.label, value=value, error=errors[config.key], type=config.type, attrs=default_attrs, is_required=config.required) %}
+                    {{ info(config.help_text) }}
+                {% endcall %}
+            {% else %}
+                {% call form.textarea(config.key if not config.disabled else "", label=config.label, value=value, error=errors[config.key], attrs=default_attrs, is_required=config.required) %}
+                    {{ info(config.help_text) }}
+                {% endcall %}
+            {% endif %}
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">{{ _('Update') }}</button>
+    </form>
+{% endblock ap_content %}

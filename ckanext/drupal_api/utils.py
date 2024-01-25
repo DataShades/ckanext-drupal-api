@@ -4,12 +4,12 @@ import json
 import pickle
 
 from functools import wraps
-from typing import Callable, Dict, Optional, Union, cast, Any
+from typing import Callable, Optional, Union, cast
 
 import ckan.plugins.toolkit as tk
 import ckan.lib.redis as redis
 
-import ckanext.drupal_api.config as c
+import ckanext.drupal_api.config as da_conf
 from ckanext.drupal_api.types import T, MaybeNotCached, DontCache
 from ckanext.drupal_api.logic.api import CoreAPI, JsonAPI
 
@@ -17,17 +17,16 @@ from ckanext.drupal_api.logic.api import CoreAPI, JsonAPI
 log = logging.getLogger(__name__)
 
 
-def _get_api_version() -> Optional[Union[CoreAPI, JsonAPI]]:
+def get_api_version() -> Optional[Union[CoreAPI, JsonAPI]]:
     """
     Returns a connector class for an API
     There are two supported versions:
         - JSON API
         - Rest API (Drupal core)
     """
-    supported_api = {c.JSON_API: JsonAPI, c.CORE_API: CoreAPI}
+    supported_api = {da_conf.JSON_API: JsonAPI, da_conf.CORE_API: CoreAPI}
 
-    api_version: str = tk.config.get(c.CONFIG_DRUPAL_API_VERSION, c.DEFAULT_API_VERSION)
-    return supported_api.get(api_version)
+    return supported_api.get(da_conf.get_api_version())
 
 
 def cached(func: Callable[..., MaybeNotCached[T]]) -> Callable[..., T]:
@@ -47,9 +46,7 @@ def cached(func: Callable[..., MaybeNotCached[T]]) -> Callable[..., T]:
             return cast(T, json.loads(value))
 
         value = func(*args, **kwargs)
-        cache_duration = tk.asint(
-            tk.config.get(c.CONFIG_CACHE_DURATION, c.DEFAULT_CACHE_DURATION)
-        )
+        cache_duration = da_conf.get_cache_ttl()
 
         if isinstance(value, DontCache):
             return cast(T, value.unwrap())
@@ -79,12 +76,3 @@ def drop_cache_for(name):
 
 def _get_redis_conn():
     return redis.connect_to_redis()
-
-
-def _get_menu_export_endpoint():
-    if tk.config.get(
-        c.CONFIG_DRUPAL_API_VERSION, c.DEFAULT_API_VERSION
-    ) == "json":
-        return "/jsonapi/menu_items/{menu_id}"
-    else:
-        return tk.config.get(c.CONFIG_MENU_EXPORT, c.DEFAULT_MENU_EXPORT_EP)
