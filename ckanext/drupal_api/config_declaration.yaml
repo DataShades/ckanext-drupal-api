@@ -3,20 +3,32 @@ groups:
   - annotation: ckanext-drupal-api
     options:
       - key: ckanext.drupal_api.drupal_url
-        default: ""
+        editable: true
+        validators: ignore_empty unicode_safe url_validator
 
       - key: ckanext.drupal_api.cache.duration
         type: int
         default: 3600
+        editable: true
 
       - key: ckanext.drupal_api.timeout
         type: int
         default: 5
+        editable: true
 
       - key: ckanext.drupal_api.request.user
+        editable: true
+
       - key: ckanext.drupal_api.request.pass
+        editable: true
+
       - key: ckanext.drupal_api.api_version
         default: core
+        editable: true
 
       - key: ckanext.drupal_api.core.menu_export_endpoint
+        editable: true
         default: "/resource/layout/export"
+
+      - key: ckanext.drupal_api.footer_html
+        editable: true

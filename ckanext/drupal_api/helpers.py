@@ -27,7 +27,9 @@ def get_helpers():
 
 @helper
 @cached
-def menu(name: str, cache_extras: Optional[dict[str, Any]] = None) -> MaybeNotCached[Menu]:
+def menu(
+    name: str, cache_extras: Optional[dict[str, Any]] = None
+) -> MaybeNotCached[Menu]:
     api_connector = get_api_version()
     drupal_api = api_connector.get()
 
@@ -41,6 +43,7 @@ def menu(name: str, cache_extras: Optional[dict[str, Any]] = None) -> MaybeNotCa
         return DontCache({})
 
     return menu
+
 
 @helper
 @cached
@@ -66,3 +69,8 @@ def custom_endpoint(endpoint: str) -> dict:
         return DontCache({})
 
     return resp
+
+
+@helper
+def get_drupal_url() -> str:
+    return da_conf.get_drupal_url()

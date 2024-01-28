@@ -1,0 +1,49 @@
+scheming_version: 2
+schema_id: drupal_api_config
+about: An extension config form schema
+
+fields:
+  - field_name: ckanext.drupal_api.cache.duration
+    label: Cache TTL
+    form_placeholder: 600
+    validators: default(3600) int_validator
+    input_type: number
+
+  - field_name: ckanext.drupal_api.drupal_url
+    label: Drupal base URL
+    required: true
+
+  - field_name: ckanext.drupal_api.api_version
+    label: API version
+    validators: default(core), one_of([json, core])
+    preset: select
+    required: true
+    choices:
+      - value: json
+        label: JSON API
+      - value: core
+        label: Core REST API
+
+  - field_name: ckanext.drupal_api.core.menu_export_endpoint
+    label: Menu export API endpoint
+    validators: unicode_safe
+    required: true
+    help_text: If you are using the core API version, you might face the situation when your endpoint differ from the default one
+    form_attrs:
+        data-module: ap-disable-field
+        data-module-field-id: ckanext.drupal_api.api_version
+        data-module-field-value: json
+
+  - field_name: ckanext.drupal_api.timeout
+    label: API request timeout
+    validators: default(5) int_validator
+    input_type: number
+
+  - field_name: ckanext.drupal_api.request.user
+    label: HTTP auth user
+    validators: unicode_safe
+
+  - field_name: ckanext.drupal_api.request.pass
+    label: HTTP auth password
+    validators: unicode_safe
+    input_type: password

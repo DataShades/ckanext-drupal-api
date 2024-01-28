@@ -9,8 +9,6 @@ from ckanext.drupal_api.views import blueprints
 import ckanext.ap_main.types as ap_types
 from ckanext.ap_main.interfaces import IAdminPanel
 
-import ckanext.drupal_api.config as da_config
-
 
 class DrupalApiPlugin(p.SingletonPlugin):
     p.implements(p.ITemplateHelpers)
@@ -27,12 +25,6 @@ class DrupalApiPlugin(p.SingletonPlugin):
 
     def update_config(self, config_):
         tk.add_template_directory(config_, "templates")
-
-    def update_config_schema(self, schema):
-        for _, config in da_config.get_config_options().items():
-            schema.update({config["key"]: config["validators"]})
-
-        return schema
 
     # IBlueprint
 
