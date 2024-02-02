@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import logging
 import requests
 from typing import Optional
@@ -6,18 +7,17 @@ from urllib.parse import urljoin
 
 import ckan.plugins.toolkit as tk
 import ckan.plugins as p
-import ckanext.drupal_api.config as c
+
+import ckanext.drupal_api.config as da_conf
 
 
 log = logging.getLogger(__name__)
 
 
 def make_request(url: str) -> dict:
-    http_user: str = tk.config.get(c.CONFIG_REQUEST_HTTP_USER)
-    http_pass: str = tk.config.get(c.CONFIG_REQUEST_HTTP_PASS)
-    timeout = tk.asint(
-        tk.config.get(c.CONFIG_REQUEST_TIMEOUT, c.DEFAULT_REQUEST_TIMEOUT)
-    )
+    http_user = da_conf.get_http_user()
+    http_pass = da_conf.get_http_pass()
+    timeout = da_conf.get_request_timeout()
 
     session = requests.Session()
 
@@ -35,10 +35,12 @@ class Drupal:
 
     @classmethod
     def get(cls, instance: str = "default") -> Optional[Drupal]:
-        url = tk.config.get(c.CONFIG_DRUPAL_URL)
+        url = da_conf.get_drupal_url()
+
         if not url:
-            log.error("Drupal URL is missing: %s", c.CONFIG_DRUPAL_URL)
+            log.error("Drupal URL is missing: %s", da_conf.CONFIG_DRUPAL_URL)
             return
+
         default_lang = tk.config.get("ckan.locale_default")
         current_lang = tk.h.lang()
         localised_url = url.format(
@@ -92,12 +94,10 @@ class CoreAPI(Drupal):
         return make_request(url)
 
     def get_menu(self, name: str) -> dict:
-        data: dict = self._request(
-            endpoint=tk.config.get(c.CONFIG_MENU_EXPORT, c.DEFAULT_MENU_EXPORT_EP)
-        )
+        data: dict = self._request(endpoint=da_conf.get_menu_export_endpoint())
         log.info(
             f"Menu {name} has been fetched successfully. Cached for \
-                {tk.config.get(c.CONFIG_CACHE_DURATION, c.DEFAULT_CACHE_DURATION)} seconds"
+                {da_conf.get_cache_ttl()} seconds"
         )
         return data.get(name, {})
 

@@ -1,4 +1,6 @@
-from typing import Callable, Dict, Generic, Optional, TypeVar, Union, cast, Iterable
+from __future__ import annotations
+
+from typing import Callable, Dict, Generic, TypeVar, Union, Iterable
 
 
 T = TypeVar("T", bound=Callable)
