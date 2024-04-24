@@ -13,7 +13,7 @@ you need to set a smaller value.
 
 ## Requirements
 
-* CKAN>=2.9
+* CKAN>=2.10
 * python>=3.7
 
 ## Installation
@@ -31,7 +31,7 @@ To install ckanext-drupal-api:
     pip install -e .
 	pip install -r requirements.txt
 
-3. Add `drupal-api` to the `ckan.plugins` setting in your CKAN
+3. Add `drupal_api` to the `ckan.plugins` setting in your CKAN
    config file (by default the config file is located at
    `/etc/ckan/default/ckan.ini`).
 

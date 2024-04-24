@@ -36,6 +36,9 @@ class DrupalApiPlugin(p.SingletonPlugin):
             tk.signals.ckanext.signal("ap_main:collect_config_sections"): [
                 self.collect_config_sections_subs
             ],
+            tk.signals.ckanext.signal("ap_main:collect_config_schemas"): [
+                self.collect_config_schemas_subs
+            ],
         }
 
     @staticmethod
@@ -50,6 +53,10 @@ class DrupalApiPlugin(p.SingletonPlugin):
                 },
             ],
         }
+
+    @staticmethod
+    def collect_config_schemas_subs(sender: None):
+        return ["ckanext.drupal_api:config_schema.yaml"]
 
 
 if tk.check_ckan_version("2.10"):
