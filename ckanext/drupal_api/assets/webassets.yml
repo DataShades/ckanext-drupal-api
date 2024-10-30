@@ -1,5 +1,0 @@
-# styles:
-#   filters: cssrewrite
-#   output: ckanext-drupal_api/%(version)s-styles.css
-#   contents:
-#     - css/styles.css
