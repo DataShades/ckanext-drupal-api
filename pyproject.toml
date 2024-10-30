@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ckanext-drupal-api"
-version = "0.7.2.post1"
+version = "0.7.2.post2"
 description = ""
 classifiers = [ "Development Status :: 4 - Beta", "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)", "Programming Language :: Python :: 3.8", "Programming Language :: Python :: 3.9", "Programming Language :: Python :: 3.10", "Programming Language :: Python :: 3.11",]
 keywords = [ "CKAN",]
@@ -29,7 +29,7 @@ text = "AGPL"
 Homepage = "https://github.com/DataShades/ckanext-drupal-api"
 
 [project.entry-points."ckan.plugins"]
-comments = "ckanext.comments.plugin:CommentsPlugin"
+drupal_api = "ckanext.drupal_api.plugin:DrupalApiPlugin"
 
 [project.entry-points."babel.extractors"]
 ckan = "ckan.lib.extract:extract_ckan"
