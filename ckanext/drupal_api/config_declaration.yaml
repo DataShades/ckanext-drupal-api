@@ -21,6 +21,12 @@ groups:
 
       - key: ckanext.drupal_api.request.pass
         editable: true
+      
+      - key: ckanext.drupal_api.request.header.key
+        editable: true
+
+      - key: ckanext.drupal_api.request.header.value
+        editable: true
 
       - key: ckanext.drupal_api.api_version
         default: core

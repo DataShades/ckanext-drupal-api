@@ -47,3 +47,12 @@ fields:
     label: HTTP auth password
     validators: unicode_safe
     input_type: password
+
+  - field_name: ckanext.drupal_api.request.header.key
+    label: HTTP header auth key
+    validators: unicode_safe
+
+  - field_name: ckanext.drupal_api.request.header.value
+    label: HTTP header auth key value
+    validators: unicode_safe
+    input_type: password
