@@ -30,6 +30,7 @@ def make_request(url: str) -> dict:
 
     _add_drupal_session(session)
     req = session.get(url, timeout=timeout)
+    req.raise_for_status()
     return req.json()
 
 
