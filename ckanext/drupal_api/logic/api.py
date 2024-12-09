@@ -17,16 +17,19 @@ log = logging.getLogger(__name__)
 def make_request(url: str) -> dict:
     http_user = da_conf.get_http_user()
     http_pass = da_conf.get_http_pass()
+    http_header_key = da_conf.get_http_header_key()
+    http_header_value = da_conf.get_http_header_value()
     timeout = da_conf.get_request_timeout()
 
     session = requests.Session()
 
     if http_user and http_pass:
         session.auth = (http_user, http_pass)
+    if http_header_key and http_header_value:
+        session.headers[http_header_key] = http_header_value
 
     _add_drupal_session(session)
     req = session.get(url, timeout=timeout)
-    req.raise_for_status()
     return req.json()
 
 

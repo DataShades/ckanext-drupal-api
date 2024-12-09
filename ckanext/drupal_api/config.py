@@ -17,6 +17,10 @@ DEFAULT_REQUEST_TIMEOUT = 5
 CONFIG_REQUEST_HTTP_USER = "ckanext.drupal_api.request.user"
 CONFIG_REQUEST_HTTP_PASS = "ckanext.drupal_api.request.pass"
 
+CONFIG_REQUEST_HTTP_HEADER_KEY = "ckanext.drupal_api.request.header.key"
+CONFIG_REQUEST_HTTP_HEADER_VALUE = "ckanext.drupal_api.request.header.value"
+DEFAULT_REQUEST_HEADER_KEY = "X-CKAN-API-Key"
+
 CONFIG_DRUPAL_API_VERSION = "ckanext.drupal_api.api_version"
 JSON_API = "json"
 CORE_API = "core"
@@ -57,6 +61,11 @@ def get_http_user() -> str | None:
 def get_http_pass() -> str | None:
     return tk.config[CONFIG_REQUEST_HTTP_PASS]
 
+def get_http_header_key() -> str:
+    return tk.config[CONFIG_REQUEST_HTTP_HEADER_KEY] or DEFAULT_REQUEST_HEADER_KEY
+
+def get_http_header_value() -> str | None:
+    return tk.config[CONFIG_REQUEST_HTTP_HEADER_VALUE]
 
 def get_config_options() -> dict[str, dict[str, Any]]:
     """Defines how we are going to render the global configuration
@@ -124,6 +133,20 @@ def get_config_options() -> dict[str, dict[str, Any]]:
             "key": CONFIG_REQUEST_HTTP_PASS,
             "label": tk._("HTTP auth password"),
             "value": get_http_pass(),
+            "validators": [unicode_safe],
+            "type": "password",
+        },
+        "http_header_key": {
+            "key": CONFIG_REQUEST_HTTP_HEADER_KEY,
+            "label": tk._("HTTP header auth key"),
+            "value": get_http_header_key(),
+            "validators": [default(DEFAULT_REQUEST_HEADER_KEY), unicode_safe],
+            "type": "text",
+        },
+        "http_header_value": {
+            "key": CONFIG_REQUEST_HTTP_HEADER_VALUE,
+            "label": tk._("HTTP header auth key value"),
+            "value": get_http_header_value(),
             "validators": [unicode_safe],
             "type": "password",
         },
