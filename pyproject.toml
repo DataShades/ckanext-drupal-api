@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ckanext-drupal-api"
-version = "0.7.2.post2"
+version = "0.8.0"
 description = ""
 classifiers = [ "Development Status :: 4 - Beta", "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)", "Programming Language :: Python :: 3.8", "Programming Language :: Python :: 3.9", "Programming Language :: Python :: 3.10", "Programming Language :: Python :: 3.11",]
 keywords = [ "CKAN",]
