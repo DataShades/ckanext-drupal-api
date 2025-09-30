@@ -5,9 +5,9 @@ import ckan.plugins as p
 import ckan.plugins.toolkit as tk
 
 import ckanext.drupal_api.helpers as helpers
-from ckanext.drupal_api.views import blueprints
 
 
+@tk.blanket.blueprints
 class DrupalApiPlugin(p.SingletonPlugin):
     p.implements(p.ITemplateHelpers)
     p.implements(p.IConfigurer)
@@ -23,11 +23,6 @@ class DrupalApiPlugin(p.SingletonPlugin):
 
     def update_config(self, config_):
         tk.add_template_directory(config_, "templates")
-
-    # IBlueprint
-
-    def get_blueprint(self):
-        return blueprints
 
     # ISignal
 

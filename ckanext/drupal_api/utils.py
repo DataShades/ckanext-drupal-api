@@ -64,13 +64,11 @@ def key_for(name: str) -> bytes:
     return bytes("ckan:" + tk.config["ckan.site_id"] + ":drupal-api:" + name, "utf8")
 
 
-def drop_cache_for(name):
-    """
-    Deletes keys from redis with the specified prefix
-    """
+def drop_cache_for(name: str) -> None:
+    """Deletes keys from redis with the specified prefix."""
     conn = _get_redis_conn()
     prefix = key_for(name)
-    for k in conn.keys(prefix + b"*"):
+    for k in conn.keys(prefix + b"*"): # type: ignore
         conn.delete(k)
 
 

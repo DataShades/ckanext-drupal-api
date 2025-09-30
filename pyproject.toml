@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ckanext-drupal-api"
-version = "0.8.0"
+version = "0.8.1"
 description = ""
 classifiers = [ "Development Status :: 4 - Beta", "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)", "Programming Language :: Python :: 3.8", "Programming Language :: Python :: 3.9", "Programming Language :: Python :: 3.10", "Programming Language :: Python :: 3.11",]
 keywords = [ "CKAN",]
@@ -17,6 +17,9 @@ authors = [
 maintainers = [
     {name = "DataShades", email = "datashades@linkdigital.com.au"},
 ]
+
+[project.optional-dependencies]
+mysql = [ "mysqlclient",]
 
 [project.readme]
 file = "README.md"
@@ -36,3 +39,8 @@ ckan = "ckan.lib.extract:extract_ckan"
 
 [tool.setuptools.packages]
 find = {}
+
+[tool.ruff.lint.isort.sections]
+ckan = ["ckan"]
+ckanext = ["ckanext"]
+self = ["ckanext.drupal_api"]
